@@ -1,0 +1,2 @@
+class Palyer < ApplicationRecord
+end

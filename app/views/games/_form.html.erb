@@ -1,0 +1,56 @@
+<%= form_with(model: game, local: true) do |form| %>
+  <% if game.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(game.errors.count, "error") %> prohibited this game from being saved:</h2>
+
+      <ul>
+      <% game.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :address %>
+    <%= form.text_field :address, id: :game_address %>
+  </div>
+
+  <div class="field">
+    <%= form.label :time %>
+    <%= form.time_select :time, id: :game_time %>
+  </div>
+
+  <div class="field">
+    <%= form.label :teams %>
+    <%= form.number_field :teams, id: :game_teams %>
+  </div>
+
+  <div class="field">
+    <%= form.label :players %>
+    <%= form.number_field :players, id: :game_players %>
+  </div>
+
+  <div class="field">
+    <%= form.label :sp_rules %>
+    <%= form.text_area :sp_rules, id: :game_sp_rules %>
+  </div>
+
+  <div class="field">
+<%= form.select(:activity_id) do %>
+<% @activities.each do |c| -%>
+  <%= content_tag(:option, c.name, value: c.id) %>
+<% end %>
+<% end %>
+</div>
+
+
+
+  <div class="actions">
+    <% if user_signed_in? %>
+    <%= form.submit %>
+    <% else %>
+    <%= link_to "Log In First!!", new_user_session_path, class: "btn btn-primary" %>
+    <% end %>
+  </div>
+<% end %>

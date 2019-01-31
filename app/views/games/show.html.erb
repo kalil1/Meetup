@@ -1,0 +1,42 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Address:</strong>
+  <%= @game.address %>
+</p>
+
+<p>
+  <strong>Longitude:</strong>
+  <%= @game.longitude %>
+</p>
+
+<p>
+  <strong>Latitude:</strong>
+  <%= @game.latitude %>
+</p>
+
+<p>
+  <strong>Time:</strong>
+  <%= @game.time %>
+</p>
+
+<p>
+  <strong>Teams:</strong>
+  <%= @game.teams %>
+</p>
+
+<p>
+  <strong>Players:</strong>
+  <%= @game.players %>
+</p>
+
+<p>
+  <strong>Sp rules:</strong>
+  <%= @game.sp_rules %>
+</p>
+<p>
+<%= image_tag "https://maps.googleapis.com/maps/api/staticmap?zoom=17&size=400x300&markers=size:small%7Ccolor:red%7C#{@game.latitude},#{@game.longitude}&key=AIzaSyA979Cgo5xh70LxHak8DxCgPaN1Vyqt0vM", alt: "Map" %>
+</p>
+
+<%= link_to 'Edit', edit_game_path(@game) %> |
+<%= link_to 'Back', games_path %>
