@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby2.4
+#!/usr/bin/env ruby3.3.0
 begin
   load File.expand_path('../spring', __FILE__)
 rescue LoadError => e
