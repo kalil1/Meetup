@@ -1,37 +1,10 @@
-<p id="notice"><%= notice %></p>
+<!-- app/views/games/index.html.erb -->
+<h1>Upcoming Games</h1>
 
-<h1>Games</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th>Address</th>
-      <!-- <th>Longitude</th>
-      <th>Latitude</th> -->
-      <th>Time</th>
-      <th>Teams</th>
-      <th>Players</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @games.each do |game| %>
-      <tr>
-        <td><%= game.address %></td>
-        <!-- <td><#%= game.longitude %></td>
-        <td><#%= game.latitude %></td> -->
-        <td><%= game.time.strftime("%I:%M %p") %></td>
-        <td><%= game.teams %></td>
-        <td><%= game.players %></td>
-        <td><%= link_to 'Show', game %></td>
-        <td><%= link_to 'Edit', edit_game_path(game) %></td>
-        <td><%= link_to 'Destroy', game, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<%= link_to 'New Game', new_game_path %>
+<% @games.each do |game| %>
+  <div>
+    <h2><%= game.activity.name %> Game</h2>
+    <p><%= game.location %></p>
+    <%= link_to 'Join', join_game_path(game), method: :post %>
+  </div>
+<% end %>

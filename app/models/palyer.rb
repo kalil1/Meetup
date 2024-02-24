@@ -1,2 +1,0 @@
-class Palyer < ApplicationRecord
-end

@@ -15,6 +15,12 @@ Rails.application.routes.draw do
     end
   end
   devise_for :users
+  resources :games, only: [:index, :new, :create] do
+    member do
+      post 'join'
+    end
+  end
+  root to: 'games#index'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
