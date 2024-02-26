@@ -4,4 +4,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
         has_many :games
+        has_one :player
+        delegate :latitude, :longitude, to: :player, allow_nil: true
+  
 end
