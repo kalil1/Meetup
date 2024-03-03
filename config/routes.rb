@@ -15,6 +15,7 @@ Rails.application.routes.draw do
     end
   end
   devise_for :users
+  resources :players, only: [:new, :edit, :update, :show, :create, :destroy] 
   resources :games, only: [:index, :new, :create] do
     member do
       post 'join'
