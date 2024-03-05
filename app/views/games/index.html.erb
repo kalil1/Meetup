@@ -1,10 +1,81 @@
-<!-- app/views/games/index.html.erb -->
-<h1>Upcoming Games</h1>
+<style>
+/* CSS code for card list */
+.card-list {
+  overflow-x: auto; /* Enable horizontal scrolling */
+  white-space: nowrap; /* Prevent card stacking */
+}
 
-<% @games.each do |game| %>
-  <div>
-    <h2><%= game.activity.name %> Game</h2>
-    <p><%= game.location %></p>
-    <%= link_to 'Join', join_game_path(game), method: :post %>
+.card {
+  display: inline-block;
+  width: 300px; /* Adjust card width as needed */
+  margin-right: 10px; /* Add some spacing between cards */
+}
+
+</style>
+<!-- HTML code for the card list -->
+<div class="card-list">
+  <div class="card-deck">
+    <!-- Cards will be dynamically added here -->
   </div>
-<% end %>
+</div>
+
+<script>
+// JavaScript code to make an Ajax call to fetch park data from the server
+function fetchParksAndDisplay() {
+  $.ajax({
+    type: 'GET',
+    url: '/parks',
+    dataType: 'json',
+    success: function(data) {
+      displayParks(data);
+    },
+    error: function(xhr, status, error) {
+      console.error("Error fetching park data:", error);
+    }
+  });
+}
+
+// JavaScript code to dynamically create cards and display Google Maps using fetched park data
+function displayParks(parks) {
+  const cardList = document.querySelector('.card-list');
+  cardList.innerHTML = ''; // Clear existing content
+
+  parks.forEach(function(park) {
+    const card = document.createElement('div');
+    card.classList.add('card');
+    
+    const cardBody = document.createElement('div');
+    cardBody.classList.add('card-body');
+
+    const title = document.createElement('h5');
+    title.classList.add('card-title');
+    title.textContent = park.name;
+
+    const mapContainer = document.createElement('div');
+    mapContainer.style.height = '200px'; // Set height for the map container
+
+    cardBody.appendChild(title);
+    cardBody.appendChild(mapContainer);
+    card.appendChild(cardBody);
+    cardList.appendChild(card);
+
+    // Display Google Maps within each card
+    const map = new google.maps.Map(mapContainer, {
+      center: { lat: parseFloat(park.latitude), lng: parseFloat(park.longitude) },
+      zoom: 15
+    });
+
+    const marker = new google.maps.Marker({
+      position: { lat: parseFloat(park.latitude), lng: parseFloat(park.longitude) },
+      map: map,
+      title: park.name
+    });
+  });
+}
+
+// Trigger the fetchParksAndDisplay function when the page loads
+document.addEventListener('DOMContentLoaded', function() {
+  fetchParksAndDisplay();
+});
+
+</script>
