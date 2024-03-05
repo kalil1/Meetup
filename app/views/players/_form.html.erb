@@ -1,5 +1,5 @@
 <%= form_with(model: player, local: true) do |form| %>
-  <% if player.errors.any? %>
+  <% if player.try(:errors) %>
     <div id="error_explanation">
       <h2><%= pluralize(player.errors.count, "error") %> prohibited this player from being saved:</h2>
 
@@ -15,6 +15,12 @@
     <%= form.label :name %>
     <%= form.text_field :name, id: :player_name %>
   </div>
+
+  <p id="find-me">Find me</p>
+  <div id="map" style="height: 400px;"></div>
+  <p id="status"></p>
+  <a id="map-link" target="_blank"></a>
+
   <div class="actions">
     <%= form.submit %>
   </div>

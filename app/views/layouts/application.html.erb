@@ -28,6 +28,115 @@
     <body class="body-wrapper" >
     <%= yield %>
   </body>
+  <script>
+  function geoFindMe() {
+    const status = document.querySelector("#status");
+    const mapLink = document.querySelector("#map-link");
+    const parksList = document.querySelector("#parks-list");
+  
+    mapLink.href = "";
+    mapLink.textContent = "";
+  
+    function success(position) {
+      const latitude = position.coords.latitude;
+      const longitude = position.coords.longitude;
+  
+      status.textContent = "";
+  
+      // Display map with nearby parks
+      const map = new google.maps.Map(document.getElementById("map"), {
+        center: { lat: latitude, lng: longitude },
+        zoom: 15,
+      });
+  
+      const service = new google.maps.places.PlacesService(map);
+  
+      service.nearbySearch(
+        {
+          location: { lat: latitude, lng: longitude },
+          radius: 1500, // 1500 meters (approx. 1.5 km) radius
+          type: ["park"], // Search for parks
+        },
+        function (results, status) {
+          if (status === google.maps.places.PlacesServiceStatus.OK) {
+            for (let i = 0; i < results.length; i++) {
+              createMarker(map, results[i]);
+            }
+          }
+        }
+      );
+  
+      mapLink.href = `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`;
+      mapLink.textContent = `Latitude: ${latitude} °, Longitude: ${longitude} °`;
+    }
+  
+    function error() {
+      status.textContent = "Unable to retrieve your location";
+    }
+  
+    if (!navigator.geolocation) {
+      status.textContent = "Geolocation is not supported by your browser";
+    } else {
+      status.textContent = "Locating…";
+      navigator.geolocation.getCurrentPosition(success, error);
+    }
+  }
+  
+  // Update the success function to display a map showing all parks in the area
+  function success(position) {
+    const latitude = position.coords.latitude;
+    const longitude = position.coords.longitude;
+  
+    const map = new google.maps.Map(document.getElementById("map"), {
+      center: { lat: latitude, lng: longitude },
+      zoom: 12
+    });
+  
+    const request = {
+      location: { lat: latitude, lng: longitude },
+      radius: '5000',  // 5 kilometers
+      type: ['park']
+    };
+  
+    const service = new google.maps.places.PlacesService(map);
+    service.nearbySearch(request, callback);
+  
+    function callback(results, status) {
+      if (status === google.maps.places.PlacesServiceStatus.OK) {
+        for (let i = 0; i < results.length; i++) {
+          const place = results[i];
+          new google.maps.Marker({
+            position: place.geometry.location,
+            map,
+            title: place.name
+          });
+        }
+      }
+    }
+  
+    status.textContent = "";
+  }
+  
+  // Modify the Ajax call to send park information back to the server
+  function sendParkInfoToServer(parks) {
+    $.ajax({
+      type: 'POST',
+      url: '/parks',
+      data: { parks: parks },
+      dataType: 'json',
+      success: function(data) {
+        console.log("Parks information sent to server successfully.");
+      },
+      error: function(xhr, status, error) {
+        console.error("Error sending parks information to server:", error);
+      }
+    });
+  }
+  
+  document.querySelector("#find-me").addEventListener("click", function() {
+    geoFindMe(sendParkInfoToServer);
+  });
+  </script>
   <script src="plugins/jquery/jquery.min.js"></script>
   <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
   <script src="plugins/tether/js/tether.min.js"></script>
